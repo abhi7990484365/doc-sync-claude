@@ -1,6 +1,6 @@
 # SDLC state
 
 - Current step: 5 Implement
-- Status: T-2 done; next T-3
+- Status: T-3 done; next T-4
 - Last commit: see git log
 - Pending gate: none
