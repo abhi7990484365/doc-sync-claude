@@ -4,4 +4,5 @@ import sys
 
 from doc_sync.cli import main
 
-sys.exit(main())
+if __name__ == "__main__":
+    sys.exit(main())
