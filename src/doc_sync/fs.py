@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import stat
 from pathlib import Path
 
 GIT_DIR = ".git"
@@ -22,13 +23,24 @@ def _is_output_file(root: Path, path: Path) -> bool:
     return path == root.joinpath(*OUTPUT_RELATIVE)
 
 
+def _is_link_or_reparse(path: str) -> bool:
+    """True for symlinks and NTFS junctions/reparse points (no-op flag on POSIX)."""
+    if os.path.islink(path):
+        return True
+    try:
+        attrs = getattr(os.lstat(path), "st_file_attributes", 0)
+    except OSError:
+        return False
+    return bool(attrs & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
+
+
 def _walk_dirs(root: Path) -> list[tuple[Path, list[str], list[str]]]:
-    """Walk root, pruning .git and ignoring errors; symlinked dirs are not followed."""
+    """Walk root, pruning .git and ignoring errors; symlinks and junctions are not followed."""
     entries: list[tuple[Path, list[str], list[str]]] = []
     for current, dirnames, filenames in os.walk(root, onerror=lambda _e: None):
         dirnames[:] = [
             d for d in dirnames
-            if d != GIT_DIR and not os.path.islink(os.path.join(current, d))
+            if d != GIT_DIR and not _is_link_or_reparse(os.path.join(current, d))
         ]
         entries.append((Path(current), dirnames, filenames))
     return entries

@@ -69,3 +69,21 @@ def test_unencodable_char_replaced(tmp_path: Path) -> None:
     out = write_doc(tmp_path, "a\ud800b\n")
     assert out.read_text(encoding="utf-8") == "a?b\n"
     assert os.path.exists(out)
+
+
+@pytest.mark.skipif(os.name != "posix", reason="POSIX file modes")
+def test_new_file_mode_follows_umask(tmp_path: Path) -> None:
+    old = os.umask(0o022)
+    try:
+        out = write_doc(tmp_path, "x\n")
+    finally:
+        os.umask(old)
+    assert out.stat().st_mode & 0o777 == 0o644
+
+
+@pytest.mark.skipif(os.name != "posix", reason="POSIX file modes")
+def test_existing_mode_preserved(tmp_path: Path) -> None:
+    out = write_doc(tmp_path, "x\n")
+    out.chmod(0o664)
+    write_doc(tmp_path, "y\n")
+    assert out.stat().st_mode & 0o777 == 0o664

@@ -23,7 +23,8 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("repo_path", metavar="REPO_PATH", nargs="?", default=None)
     args = parser.parse_args(argv)
-    args.repo_path = Path(args.repo_path) if args.repo_path else Path.cwd()
+    args.empty_path = args.repo_path == ""
+    args.repo_path = Path(args.repo_path) if args.repo_path is not None else Path.cwd()
     return args
 
 
@@ -39,18 +40,34 @@ def path_error(path: Path) -> str:
     return f"REPO_PATH not found: {path}"
 
 
+def safe_line(text: str) -> str:
+    """Return text that the stdout encoding can represent (backslash escapes)."""
+    encoding = getattr(sys.stdout, "encoding", None) or "utf-8"
+    return text.encode(encoding, errors="backslashreplace").decode(encoding)
+
+
+def write_failure(exc: OSError) -> str:
+    """Return the one-line message for a failed write."""
+    return f"Could not write document: {exc.strerror or type(exc).__name__}"
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the tool and return the process exit code."""
-    args = parse_args(argv)
-    root = resolve_repo(args.repo_path)
-    if root is None:
-        print(path_error(args.repo_path), file=sys.stderr)
-        return EXIT_USAGE
     try:
-        target = write_doc(root, render_document(collect(root)))
+        args = parse_args(argv)
+    except OSError:
+        print("Could not determine the current directory", file=sys.stderr)
+        return EXIT_USAGE
+    root = None if args.empty_path else resolve_repo(args.repo_path)
+    if root is None:
+        message = "REPO_PATH not found: " if args.empty_path else path_error(args.repo_path)
+        print(safe_line(message), file=sys.stderr)
+        return EXIT_USAGE
+    text = render_document(collect(root))
+    try:
+        target = write_doc(root, text)
     except OSError as exc:
-        reason = exc.strerror or type(exc).__name__
-        print(f"Could not write document: {reason}", file=sys.stderr)
+        print(safe_line(write_failure(exc)), file=sys.stderr)
         return EXIT_WRITE_ERROR
-    print(f"Wrote {target}")
+    print(safe_line(f"Wrote {target}"))
     return EXIT_OK

@@ -67,3 +67,57 @@ def test_output_has_no_env_values(
     assert main([str(tmp_path)]) == 0
     captured = capsys.readouterr()
     assert "s3cr3t-value-xyz" not in captured.out + captured.err
+
+
+def test_empty_path_is_not_cwd(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys
+) -> None:
+    monkeypatch.chdir(tmp_path)
+    assert main([""]) == 2
+    assert capsys.readouterr().err.startswith("REPO_PATH not found: ")
+    assert not (tmp_path / "docs").exists()
+
+
+def test_cwd_failure_exit_2(monkeypatch: pytest.MonkeyPatch, capsys) -> None:
+    def boom() -> Path:
+        raise FileNotFoundError("gone")
+
+    monkeypatch.setattr(Path, "cwd", staticmethod(boom))
+    assert main([]) == 2
+    err = capsys.readouterr().err
+    assert len(err.strip().splitlines()) == 1
+    assert "Traceback" not in err
+
+
+def test_collect_oserror_not_reported_as_write_failure(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    from doc_sync import cli
+
+    def boom(_root: Path) -> object:
+        raise OSError("collect failed")
+
+    monkeypatch.setattr(cli, "collect", boom)
+    with pytest.raises(OSError, match="collect failed"):
+        main([str(tmp_path)])
+
+
+def test_success_line_survives_unencodable_path(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, capsys
+) -> None:
+    import io
+    import sys
+
+    from doc_sync import cli
+
+    target = tmp_path / "café日"
+    monkeypatch.setattr(cli, "write_doc", lambda _r, _t: target)
+    bs = bytes([92])
+    buf = io.BytesIO()
+    monkeypatch.setattr(
+        sys, "stdout", io.TextIOWrapper(buf, encoding="ascii", errors="strict")
+    )
+    assert main([str(tmp_path)]) == 0
+    sys.stdout.flush()
+    assert (bs + b"xe9") in buf.getvalue()
+    assert (bs + b"u65e5") in buf.getvalue()
