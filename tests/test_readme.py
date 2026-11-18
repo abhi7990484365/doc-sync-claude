@@ -101,3 +101,12 @@ def test_section_setext_heading_ends_section() -> None:
 
 def test_section_heading_in_fence_not_matched() -> None:
     assert section_body("```\n## Usage\nx\n```\n", TITLES) is None
+
+
+def test_first_paragraph_skips_html_heading_and_html_only_lines() -> None:
+    text = '<h1 align="center">Proj</h1>\n<p align="center">\n<img src="x.png">\n\nReal text\n'
+    assert first_paragraph(text) == "Real text"
+
+
+def test_first_paragraph_html_heading_only_is_none() -> None:
+    assert first_paragraph('<h1 align="center">Proj</h1>\n') is None

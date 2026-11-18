@@ -12,6 +12,28 @@ _SETEXT_1_RE = re.compile(r"^ {0,3}=+\s*$")
 _SETEXT_2_RE = re.compile(r"^ {0,3}-+\s*$")
 
 
+_CONTAINER_RE = re.compile(r"^(?: {0,3}(?:>[ \t]?|[-*+][ \t]+|\d{1,9}[.)][ \t]+))+")
+_HTML_HEADING_RE = re.compile(r"^\s*<h[1-6](?:[\s/>]|$)", re.IGNORECASE)
+_HTML_TAG_RE = re.compile(r"<[^>]*>")
+
+
+def split_container(line: str) -> tuple[str, str]:
+    """Split leading blockquote/list markers from the rest of the line."""
+    match = _CONTAINER_RE.match(line)
+    end = match.end() if match else 0
+    return line[:end], line[end:]
+
+
+def is_html_heading(line: str) -> bool:
+    """True if the line starts a raw HTML `<h1>`..`<h6>` element."""
+    return _HTML_HEADING_RE.match(line) is not None
+
+
+def is_html_only(line: str) -> bool:
+    """True if the line is non-blank and holds only HTML tags and spaces."""
+    return bool(line.strip()) and not _HTML_TAG_RE.sub("", line).strip()
+
+
 class Heading(NamedTuple):
     """A heading. `start` and `end` are 0-based line indexes, both inclusive.
 

@@ -3,7 +3,12 @@ from __future__ import annotations
 import pytest
 
 from doc_sync.collect import ProjectInfo
-from doc_sync.markdown import find_headings
+from doc_sync.markdown import (
+    atx_heading,
+    find_headings,
+    is_html_heading,
+    split_container,
+)
 from doc_sync.render import (
     NOT_FOUND,
     SECTION_ORDER,
@@ -120,3 +125,45 @@ def test_no_env_values(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("DOC_SYNC_FAKE_TOKEN", "s3cr3t-value-123")
     out = render_document(ProjectInfo(name="X"))
     assert "s3cr3t-value-123" not in out
+
+
+def _assert_structure(out: str) -> None:
+    """Exactly 7 level-2 headings, one level-1, no hidden heading markers."""
+    assert _headings(out, 2) == list(SECTION_ORDER)
+    assert len(_headings(out, 1)) == 1
+    for line in out.splitlines():
+        prefix, rest = split_container(line)
+        if prefix:
+            assert atx_heading(rest) is None
+        assert not is_html_heading(rest)
+
+
+@pytest.mark.parametrize("name", ["## Evil", "# X", "### Y", "<h1>Z</h1>"])
+def test_name_cannot_create_headings(name: str) -> None:
+    out = render_document(ProjectInfo(name=name))
+    _assert_structure(out)
+    assert out.splitlines()[0] == f"# {name}"
+
+
+@pytest.mark.parametrize(
+    "text",
+    ["> ## x", "- # x", "1. # x", "> > # x", "<h1>x</h1>", '<H2 id="a">x', "  <h3>x"],
+)
+def test_safe_body_neutralizes_hidden_headings(text: str) -> None:
+    out = render_document(ProjectInfo(description=f"Intro\n\n{text}\n", how_to_run=text))
+    _assert_structure(out)
+    assert "\\" in safe_body(text)
+
+
+def test_safe_body_keeps_plain_blockquote_and_list() -> None:
+    assert safe_body("> quote\n- item\n1. one") == "> quote\n- item\n1. one"
+
+
+def test_render_list_item_heading_is_neutral() -> None:
+    items = ["## x", "# y", "<h1>z</h1>", "plain"]
+    expected = ["- \\## x", "- \\# y", "- \\<h1>z</h1>", "- plain"]
+    assert render_list(items) == "\n".join(expected)
+    out = render_document(
+        ProjectInfo(entry_points=items, dependencies=["## x"], languages=["# y"])
+    )
+    _assert_structure(out)

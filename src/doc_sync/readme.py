@@ -6,7 +6,13 @@ import re
 from pathlib import Path
 
 from doc_sync.fs import read_text
-from doc_sync.markdown import Heading, fence_flags, find_headings
+from doc_sync.markdown import (
+    Heading,
+    fence_flags,
+    find_headings,
+    is_html_heading,
+    is_html_only,
+)
 
 README_NAME = "README.md"
 _THEMATIC_RE = re.compile(r"^ {0,3}([-*_])(?:[ \t]*\1){2,}[ \t]*$")
@@ -42,7 +48,7 @@ def first_paragraph(text: str) -> str | None:
     skipped = _skipped_lines(lines, find_headings(lines))
     run: list[str] = []
     for line, skip in zip(lines, skipped):
-        if skip or not line.strip():
+        if skip or not line.strip() or is_html_heading(line) or is_html_only(line):
             if run:
                 break
             continue

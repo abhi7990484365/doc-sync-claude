@@ -5,7 +5,13 @@ from __future__ import annotations
 from typing import Final
 
 from doc_sync.collect import ProjectInfo
-from doc_sync.markdown import atx_heading, fence_flags, setext_level
+from doc_sync.markdown import (
+    atx_heading,
+    fence_flags,
+    is_html_heading,
+    setext_level,
+    split_container,
+)
 
 NOT_FOUND: Final = "Not Found"
 SECTION_ORDER: Final[tuple[str, ...]] = (
@@ -26,7 +32,14 @@ def single_line(value: str) -> str:
 
 
 def _demote(line: str) -> str:
-    """Turn a level 1 or 2 ATX heading line into a level 3 heading."""
+    """Make a line unable to start a level 1 or 2 heading.
+
+    Top-level level 1/2 ATX headings become level 3. Headings behind
+    blockquote/list markers and raw HTML heading lines are backslash-escaped.
+    """
+    prefix, rest = split_container(line)
+    if is_html_heading(rest) or (prefix and atx_heading(rest) is not None):
+        return f"{prefix}\\{rest.lstrip()}"
     heading = atx_heading(line)
     if heading is None or heading[0] > _MAX_DEMOTED_LEVEL:
         return line
@@ -73,7 +86,7 @@ def render_text(value: str | None) -> str:
 def render_list(items: list[str]) -> str:
     """Render `- item` lines, or `Not Found` for an empty list."""
     cleaned = [single_line(item) for item in items if isinstance(item, str)]
-    lines = [f"- {item}" for item in cleaned if item]
+    lines = [_demote(f"- {item}") for item in cleaned if item]
     return "\n".join(lines) if lines else NOT_FOUND
 
 
@@ -93,7 +106,7 @@ def render_document(info: ProjectInfo) -> str:
     """Build the full PROJECT_DOC.md text with one trailing newline."""
     name = _render_name(info.name)
     bodies = (
-        name,
+        render_text(name),
         render_text(info.description),
         render_list(info.languages),
         render_list(info.dependencies),
