@@ -1,6 +1,6 @@
 # SDLC state
 
-- Current step: 5 Implement
-- Status: T-16 done; next T-17
+- Current step: 6 Code review
+- Status: T-1..T-17 done; running pip-audit and reviewer
 - Last commit: see git log
-- Pending gate: none
+- Pending gate: code-review decisions
