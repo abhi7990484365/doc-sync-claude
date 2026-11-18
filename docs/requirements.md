@@ -1,45 +1,50 @@
 # Requirements: Automated Documentation Sync
 
-Source: `docs/user-story.md`. Status: draft, no user answers yet.
+Source: `docs/user-story.md` (with acceptance criteria). Format: `.claude/skills/doc-sync-format/SKILL.md`.
+Status: regenerated; acceptance criteria treated as confirmed answers.
 
 ## Overview
-A Python 3.11 CLI (`doc_sync`) scans a repository and generates `docs/PROJECT_DOC.md`
-so documentation stays in sync with the code. Any data the tool cannot find is written
-as exactly `Not Found`. Output structure is defined by `.claude/skills/doc-sync-format/SKILL.md`.
+A Python 3.11 CLI, invoked as `doc_sync [REPO_PATH]`, scans a repository and writes
+`docs/PROJECT_DOC.md` so documentation stays in sync with the code. Data that cannot be
+found is written as exactly `Not Found`. Failures (empty repo, missing file, git error)
+never crash the tool. No secrets are ever printed or written.
 
 ## Functional Requirements
-- FR-1: The CLI scans a repository and writes `docs/PROJECT_DOC.md`. (story: scan + generate)
-- FR-2: The file starts with one `# <Name>` title line, or `# Not Found` if the name is unknown. (doc-sync-format)
-- FR-3: The file contains exactly these level-2 sections in this order: Name, Description, Languages, Dependencies, Entry Points, How to Run, Last Commit. No section is omitted. (story; doc-sync-format)
-- FR-4: If a section's data is missing, unreadable, or the repo is empty, the section body is exactly `Not Found` (case and spacing exact, no punctuation or extra words). (story)
-- FR-5: Languages, Dependencies and Entry Points are rendered as `- item` lines; an empty list is `Not Found`. (doc-sync-format)
-- FR-6: Last Commit is rendered as `<short-sha> <date> <subject>`, otherwise `Not Found`. (doc-sync-format)
-- FR-7: The tool never invents content; only data found in the repo is written. (story; doc-sync-format)
-- FR-8: Missing files, an empty repo, and API failures do not crash the tool; the affected sections become `Not Found`. (story constraint)
-- FR-9: Re-running the tool on an unchanged repo produces identical output. (story: "stays in sync"; testable derivation)
-- FR-10: Credentials, if any are needed, are read only from environment variables. (story constraint)
+- FR-1: The CLI is invoked as `doc_sync [REPO_PATH]`; `REPO_PATH` is optional. (story)
+- FR-2: The tool scans the repository and writes `docs/PROJECT_DOC.md`. (story)
+- FR-3: The file starts with one `# <Name>` title line, or `# Not Found` if the name is unknown. (doc-sync-format)
+- FR-4: The file contains exactly these level-2 sections, in this order, none omitted: `## Name`, `## Description`, `## Languages`, `## Dependencies`, `## Entry Points`, `## How to Run`, `## Last Commit`. (story AC1; doc-sync-format)
+- FR-5: Name and Description are read from `pyproject.toml` or from the first paragraph of `README.md`. (story AC2)
+- FR-6: Languages are detected from file extensions; files under `.git` are ignored. (story AC3)
+- FR-7: Dependencies are read from `requirements.txt`. (story AC4)
+- FR-8: Last Commit is read from git and rendered as `<short-sha> <date> <subject>`. (story AC5; doc-sync-format)
+- FR-9: Languages, Dependencies and Entry Points are rendered as `- item` lines; an empty list is `Not Found`. (doc-sync-format)
+- FR-10: Any missing, unreadable or empty data makes the section body exactly `Not Found` (case and spacing exact, no punctuation, no extra words). (story AC6; doc-sync-format)
+- FR-11: An empty repo, a missing source file, or a git failure does not crash the tool; only the affected section(s) become `Not Found`. (story AC7)
+- FR-12: The tool never guesses or invents content; only data found in the repo is written. (doc-sync-format; CLAUDE.md)
 
 ## Non-Functional Requirements
-- NFR-1: Runs on Python 3.11; all function signatures have type hints. (CLAUDE.md)
-- NFR-2: No secrets or environment variable values appear in the output file, logs, or console output. (story; CLAUDE.md)
-- NFR-3: Every behaviour is covered by a pytest test in `tests/`. (CLAUDE.md)
-- NFR-4: The tool is small and single-purpose with no duplicated logic. (story: "small"; CLAUDE.md)
-- NFR-5: Failure modes (missing file, empty repo, API error) each have a test showing no crash and `Not Found` output. (story constraint)
+- NFR-1: Runs on Python 3.11; every function signature has type hints. (story; CLAUDE.md)
+- NFR-2: No credentials, secrets or environment variable values appear in the output file, console output or logs. (story AC8; doc-sync-format)
+- NFR-3: Any credentials, if ever needed, come only from environment variables. (CLAUDE.md)
+- NFR-4: Every behaviour is covered by a pytest test in `tests/`, including each failure mode in FR-11 (no crash, `Not Found` output). (CLAUDE.md; story AC7)
+- NFR-5: Small single-purpose functions; no duplicated logic (shared helpers, e.g. one `Not Found` renderer). (CLAUDE.md)
 
 ## Clarification Log
 | Question | Answer |
 |---|---|
-| Q1 Which API(s) does the tool call? | Pending |
-| Q2 Where do Name and Description come from? | Pending |
-| Q3 How are Languages and Dependencies detected? | Pending |
-| Q4 How are Entry Points and How to Run determined? | Pending |
-| Q5 CLI interface (args, output path, exit codes)? | Pending |
+| Q1 Where do Name and Description come from? | `pyproject.toml` or first paragraph of `README.md` (story AC2) |
+| Q2 How are Languages detected? | From file extensions, ignoring `.git` (story AC3) |
+| Q3 How are Dependencies detected? | From `requirements.txt` (story AC4) |
+| Q4 Last Commit source and format? | git, `<short-sha> <date> <subject>` (story AC5) |
+| Q5 Behaviour on missing data / failures? | Exactly `Not Found`; empty repo, missing file, git failure must not crash (story AC6, AC7) |
+| Q6 CLI interface? | `doc_sync [REPO_PATH]` (story) |
+| Q7 Which external API(s)? | Only git is named in the story; no other API: Not Found |
 
 ## Open Items
-- OI-1: Which external API(s), if any, are used (story mentions "API failures") and which environment variables hold credentials: Not Found.
-- OI-2: Source of Name and Description (manifest vs README): Not Found.
-- OI-3: Supported manifest formats and language detection method: Not Found.
-- OI-4: Definition of Entry Points and source of How to Run: Not Found.
-- OI-5: CLI arguments, default repo path, overwrite behaviour, exit codes: Not Found.
-- OI-6: Behaviour when the target is not a git repo (assumed Last Commit = `Not Found`): unconfirmed.
-- OI-7: Any Confluence/Jira source for the story: none supplied.
+- OI-1: Source of Entry Points and How to Run: Not Found.
+- OI-2: Precedence when both `pyproject.toml` and `README.md` provide Name/Description: Not Found.
+- OI-3: Default `REPO_PATH` when omitted, and whether `docs/PROJECT_DOC.md` is written inside `REPO_PATH`: Not Found.
+- OI-4: Date format in Last Commit and the extension-to-language mapping: Not Found.
+- OI-5: Exit codes and overwrite behaviour for an existing `PROJECT_DOC.md`; behaviour when `REPO_PATH` does not exist: Not Found.
+- OI-6: Confluence/Jira source for the story: none supplied.
