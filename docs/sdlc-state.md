@@ -1,6 +1,6 @@
 # SDLC state
 
-- Current step: 4 Plan
-- Status: plan written, awaiting approval
-- Last commit: a83c5a0
-- Pending gate: GATE 3 (impl-plan approval)
+- Current step: 5 Implement
+- Status: GATE 3 approved; T-1 in progress
+- Last commit: 192ba05
+- Pending gate: none
