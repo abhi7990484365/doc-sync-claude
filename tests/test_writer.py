@@ -87,3 +87,12 @@ def test_existing_mode_preserved(tmp_path: Path) -> None:
     out.chmod(0o664)
     write_doc(tmp_path, "y\n")
     assert out.stat().st_mode & 0o777 == 0o664
+
+
+def test_written_output_is_excluded_by_iter_repo_files(tmp_path: Path) -> None:
+    from doc_sync.fs import iter_repo_files
+
+    (tmp_path / "a.py").write_text("x", encoding="utf-8")
+    target = write_doc(tmp_path, "doc")
+    assert target.is_file()
+    assert iter_repo_files(tmp_path) == [tmp_path / "a.py"]

@@ -139,3 +139,12 @@ def test_iter_walk_error_is_ignored(
 
     monkeypatch.setattr(fs.os, "walk", fake_walk)
     assert iter_repo_files(tmp_path) == [tmp_path / "a.py"]
+
+
+def test_is_dir_helper(tmp_path: Path) -> None:
+    from doc_sync.fs import is_dir
+
+    (tmp_path / "f").write_text("x", encoding="utf-8")
+    assert is_dir(tmp_path)
+    assert not is_dir(tmp_path / "f")
+    assert not is_dir(tmp_path / "missing")

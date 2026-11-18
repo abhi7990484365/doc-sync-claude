@@ -7,8 +7,7 @@ import stat
 import tempfile
 from pathlib import Path
 
-DOCS_DIR = "docs"
-OUTPUT_NAME = "PROJECT_DOC.md"
+from doc_sync.fs import OUTPUT_RELATIVE
 
 
 def _target_mode(path: Path) -> int:
@@ -42,8 +41,7 @@ def atomic_write(path: Path, text: str) -> None:
 
 def write_doc(root: Path, text: str) -> Path:
     """Write text to <root>/docs/PROJECT_DOC.md and return that path."""
-    docs = Path(root) / DOCS_DIR
-    docs.mkdir(parents=True, exist_ok=True)
-    target = docs / OUTPUT_NAME
+    target = Path(root).joinpath(*OUTPUT_RELATIVE)
+    target.parent.mkdir(parents=True, exist_ok=True)
     atomic_write(target, text)
     return target

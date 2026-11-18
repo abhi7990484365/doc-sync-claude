@@ -8,6 +8,7 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from doc_sync.collect import collect
+from doc_sync.fs import is_dir
 from doc_sync.render import render_document
 from doc_sync.writer import write_doc
 
@@ -30,7 +31,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 def resolve_repo(path: Path) -> Path | None:
     """Return the path when it is a directory, else None."""
-    return path if Path(path).is_dir() else None
+    return path if is_dir(path) else None
 
 
 def path_error(path: Path) -> str:

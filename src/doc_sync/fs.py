@@ -18,6 +18,14 @@ def read_text(path: Path) -> str | None:
         return None
 
 
+def is_dir(path: Path) -> bool:
+    """True if path is an existing directory (never raises)."""
+    try:
+        return Path(path).is_dir()
+    except OSError:
+        return False
+
+
 def _is_output_file(root: Path, path: Path) -> bool:
     """True when path is the generated docs/PROJECT_DOC.md under root."""
     return path == root.joinpath(*OUTPUT_RELATIVE)

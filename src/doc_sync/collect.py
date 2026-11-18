@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
 
 from doc_sync.dependencies import read_dependencies
 from doc_sync.entry_points import collect_entry_points
-from doc_sync.fs import iter_repo_files
+from doc_sync.fs import is_dir, iter_repo_files
 from doc_sync.git_info import last_commit
 from doc_sync.languages import detect_languages
 from doc_sync.pyproject import load_pyproject, project_field
@@ -38,15 +38,7 @@ def first_present(*values: str | None) -> str | None:
     return None
 
 
-def _is_dir(root: Path) -> bool:
-    """True if root is an existing directory (never raises)."""
-    try:
-        return root.is_dir()
-    except OSError:
-        return False
-
-
-def _readme_field(readme: str | None, parser: Any) -> str | None:
+def _readme_field(readme: str | None, parser: Callable[[str], str | None]) -> str | None:
     """Apply a README parser, returning None when there is no README."""
     return None if readme is None else parser(readme)
 
@@ -54,7 +46,7 @@ def _readme_field(readme: str | None, parser: Any) -> str | None:
 def collect(root: Path) -> ProjectInfo:
     """Collect all project facts under root. Never raises."""
     root = Path(root)
-    if not _is_dir(root):
+    if not is_dir(root):
         return ProjectInfo()
     data = load_pyproject(root)
     readme = load_readme(root)
