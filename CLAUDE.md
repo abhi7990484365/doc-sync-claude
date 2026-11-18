@@ -20,6 +20,8 @@ Project: a Python 3.11 CLI (`doc_sync`) that scans a repo and writes
 ## Pipeline rules
 - Orchestrator is the main session running `/sdlc` (`.claude/commands/sdlc.md`).
   Subagents cannot start subagents or talk to the user.
+- Each step has its own command `.claude/commands/sdlc-*.md`; `/sdlc` runs them in order.
+  Shared orchestrator rules: `.claude/sdlc-common.md`.
 - Each step reads one named input file and writes one named output file in `docs/`.
 - Never invent facts, requirement ids, or test results. Unknown = `Not Found`.
 - Pipeline state lives in `docs/sdlc-state.md` so a new session can resume.

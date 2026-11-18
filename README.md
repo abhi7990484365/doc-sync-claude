@@ -10,3 +10,5 @@ Claude Code pipeline that turns a user story into a GitHub PR (use case: Automat
 8. Approve design-review decisions, the impl plan and the PR text at each gate (`auto` skips gates 2-3).
 9. The PR URL is printed at the end; progress is in `docs/sdlc-state.md`.
 10. Run tests anytime with `python -m pytest -q`.
+
+Single steps: `/sdlc-requirements`, `/sdlc-architecture`, `/sdlc-design-review`, `/sdlc-plan`, `/sdlc-implement`, `/sdlc-code-review`, `/sdlc-verify`, `/sdlc-pr`.
