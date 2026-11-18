@@ -3,9 +3,7 @@
     "github": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/",
-      "headers": {
-        "Authorization": "Bearer ${GITHUB_PAT}"
-      }
+      "headersHelper": "powershell -NoProfile -ExecutionPolicy Bypass -File .claude/hooks/github-mcp-headers.ps1"
     },
     "atlassian": {
       "type": "http",
