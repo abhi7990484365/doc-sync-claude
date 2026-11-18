@@ -1,6 +1,6 @@
 # SDLC state
 
-- Current step: 3 Design review (applying accepted findings)
-- Status: requirements updated (FR-24..28, OI-7); architect updating architecture.md
-- Last commit: 9b9abb7
-- Pending gate: none
+- Current step: 4 Plan
+- Status: architecture revised; planner running
+- Last commit: 4b9c29f
+- Pending gate: GATE 3 (impl-plan approval)
