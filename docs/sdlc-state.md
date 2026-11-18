@@ -1,6 +1,6 @@
 # SDLC state
 
 - Current step: 3 Design review (applying accepted findings)
-- Status: GATE 2 passed (accept all); analyst adds FRs for DR-9/DR-10, then architect updates architecture.md
-- Last commit: fd82a76
+- Status: requirements updated (FR-24..28, OI-7); architect updating architecture.md
+- Last commit: 9b9abb7
 - Pending gate: none
