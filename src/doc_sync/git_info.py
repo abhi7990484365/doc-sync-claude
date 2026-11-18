@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
 
 GIT_TIMEOUT_SECONDS = 10
+COMMIT_PATTERN = re.compile(r"[0-9a-f]{4,40} \d{4}-\d{2}-\d{2} \S.*")
+LOG_ARGS = ["log", "-1", "--no-show-signature", "--no-color", "--format=%h %ad %s", "--date=short"]
 
 
 def _git_name() -> str:
@@ -90,3 +93,25 @@ def run_git(root: Path, args: list[str]) -> str | None:
     if result.returncode != 0:
         return None
     return (result.stdout or "").strip()
+
+
+def is_top_level(root: Path) -> bool:
+    """Return True only if root is the top-level directory of a git work tree."""
+    top = run_git(root, ["rev-parse", "--show-toplevel"])
+    if not top or "\n" in top:
+        return False
+    resolved_top = _resolve(Path(top))
+    resolved_root = _resolve(Path(root))
+    if resolved_top is None or resolved_root is None:
+        return False
+    return os.path.normcase(str(resolved_top)) == os.path.normcase(str(resolved_root))
+
+
+def last_commit(root: Path) -> str | None:
+    """Return `<hash> <date> <subject>` of HEAD for a top-level repo, else None."""
+    if not is_top_level(root):
+        return None
+    out = run_git(root, LOG_ARGS)
+    if out is None or not COMMIT_PATTERN.fullmatch(out):
+        return None
+    return out
