@@ -42,6 +42,19 @@ def test_find_git_skips_root_and_cwd(tmp_path: Path, monkeypatch: pytest.MonkeyP
     assert git_info.find_git(root) == str(planted.resolve())
 
 
+def test_find_git_skips_relative_and_inside_cwd(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    cwd = tmp_path / "cwd"
+    _plant(cwd / "bin")
+    _plant(cwd / "rel")
+    other = tmp_path / "other"
+    monkeypatch.chdir(cwd)
+    _set_path(monkeypatch, "rel", os.path.join("..", "cwd", "rel"), cwd / "bin")
+    assert git_info.find_git(other) is None
+    good = _plant(tmp_path / "good")
+    _set_path(monkeypatch, "rel", cwd / "bin", good.parent)
+    assert git_info.find_git(other) == str(good.resolve())
+
+
 def test_find_git_none_when_only_excluded(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     root = tmp_path / "repo"
     _plant(root)
@@ -156,6 +169,7 @@ def test_last_commit_accepts_good(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
         "gpg: Good signature\n" + GOOD,
         "\x1b[33mabc1234\x1b[m 2024-05-06 x",
         GOOD + "\nsecond line",
+        *[GOOD + sep + "x" for sep in ("\x0b", "\x0c", "\x1c", "\x1d", "\x1e", "\x85", " ", " ")],
         "",
         None,
         "abc 2024-05-06 x",

@@ -43,7 +43,7 @@ def _is_executable_file(path: Path) -> bool:
 
 def _is_excluded_dir(directory: Path, cwd: Path, root: Path) -> bool:
     """Return True if the dir is the cwd or is/inside the repo root."""
-    return directory == cwd or _is_inside(directory, root)
+    return _is_inside(directory, cwd) or _is_inside(directory, root)
 
 
 def find_git(root: Path) -> str | None:
@@ -53,7 +53,7 @@ def find_git(root: Path) -> str | None:
     if resolved_root is None or cwd is None:
         return None
     for entry in os.environ.get("PATH", "").split(os.pathsep):
-        if entry.strip() in ("", "."):
+        if entry.strip() in ("", ".") or not Path(entry).is_absolute():
             continue
         directory = _resolve(Path(entry))
         if directory is None or _is_excluded_dir(directory, cwd, resolved_root):
@@ -112,6 +112,6 @@ def last_commit(root: Path) -> str | None:
     if not is_top_level(root):
         return None
     out = run_git(root, LOG_ARGS)
-    if out is None or not COMMIT_PATTERN.fullmatch(out):
+    if out is None or len(out.splitlines()) != 1 or not COMMIT_PATTERN.fullmatch(out):
         return None
     return out

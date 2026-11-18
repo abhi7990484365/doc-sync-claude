@@ -66,6 +66,31 @@ def test_credentials_never_reach_output() -> None:
     assert "@github" not in joined
 
 
+@pytest.mark.parametrize(
+    "line, expected",
+    [
+        ("a @ https://h/a.whl?token=fakeabc123", "a @ https://h/a.whl"),
+        ("a @ https://h/a.whl?private_token=fakeabc123 ; python_version>'3'", "a @ https://h/a.whl ; python_version>'3'"),
+        ("a @ https://h/a.whl?a=1&b=2", "a @ https://h/a.whl"),
+        ("a @ git+https://user:fakepass@h/x.git?x=fakeabc123", "a @ git+https://h/x.git"),
+        ("a @ file:///tmp/a.whl", "a @ file:///tmp/a.whl"),
+    ],
+)
+def test_url_query_removed(line: str, expected: str) -> None:
+    out = clean_requirement(line)
+    assert out == expected
+    assert "fakeabc123" not in (out or "")
+
+
+def test_backslash_continuation_and_hashes() -> None:
+    text = "pkg==1.0 \\\n    --hash=sha256:aaaa \\\n    --hash=sha256:bbbb\nother==2\n"
+    assert parse_requirements(text) == ["pkg==1.0", "other==2"]
+
+
+def test_hash_option_with_space_and_trailing_backslash() -> None:
+    assert parse_requirements("pkg==1 --hash sha256:cc\nz \\") == ["pkg==1", "z"]
+
+
 def test_no_url_unchanged() -> None:
     assert strip_url_credentials("pkg==1 ; python_version>'3'") == "pkg==1 ; python_version>'3'"
 
