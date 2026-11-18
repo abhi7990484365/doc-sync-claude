@@ -1,6 +1,6 @@
 # SDLC state
 
-- Current step: 6 Code review
-- Status: findings written, awaiting decisions
-- Last commit: 2de119e
-- Pending gate: code-review decisions (CR-1..CR-13)
+- Current step: 6 Code review (fixing accepted findings)
+- Status: all CR-1..CR-13 accepted; developer fixing in groups
+- Last commit: 6c7208e
+- Pending gate: none
