@@ -99,3 +99,14 @@ def test_commands_do_not_need_the_web_checks(db_file) -> None:
 
     ctx = build_context({config.ENV_DB_PATH: str(db_file)}, require_schema=False)
     assert make_engine(db_file) is not None and ctx.settings.database.database_path == str(db_file)
+
+
+@pytest.mark.parametrize(("length", "ok"), [(31, False), (32, True), (33, True), (64, True), (0, False)])
+def test_signing_key_minimum_length_is_enforced(engine, db_file, length: int, ok: bool) -> None:
+    key = "k" * length
+    if ok:
+        build_app(db_file, secret_key=key)
+        return
+    with pytest.raises(StartupError, match="EMPLOYEE_APP_SECRET_KEY") as caught:
+        build_app(db_file, secret_key=key)
+    assert "32" in str(caught.value) and (key not in str(caught.value) or length == 0)

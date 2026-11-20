@@ -8,7 +8,7 @@ import pytest
 from employee_app import config
 from employee_app.config import ConfigError, load_core_settings, load_web_settings
 
-FAKE_SECRET = "fake-signing-key-for-tests-only"
+FAKE_SECRET = "fake-signing-key-for-tests-only-0123456789"
 
 
 def web_env(tmp_path: Path, **extra: str) -> dict[str, str]:

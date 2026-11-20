@@ -16,7 +16,7 @@ from sqlalchemy.engine import Engine
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from employee_app.auth.loader import load_user
-from employee_app.config import ConfigError, WebSettings, load_web_settings
+from employee_app.config import ENV_SECRET_KEY, ConfigError, WebSettings, load_web_settings
 from employee_app.db.engine import check_reachable, create_db_engine
 from employee_app.db.errors import SchemaVerificationError, StorageError
 from employee_app.db.verify import verify_schema
@@ -25,6 +25,7 @@ from employee_app.logging_setup import configure_logging, log_event
 from employee_app.routes import auth_routes, employee_routes, errors
 
 TRUTHY = ("1", "true", "yes", "on")
+MIN_SECRET_KEY_LENGTH = 32
 
 
 class StartupError(Exception):
@@ -39,6 +40,10 @@ def _debug_requested(overrides: Mapping[str, Any] | None) -> bool:
 
 def check_settings(settings: WebSettings, debug: bool) -> None:
     """Settings-level startup checks (no database access)."""
+    if len(settings.secret_key) < MIN_SECRET_KEY_LENGTH:
+        raise StartupError(
+            f"Setting {ENV_SECRET_KEY} is too short (minimum {MIN_SECRET_KEY_LENGTH} characters)"
+        )
     if debug and settings.mode != "development":
         raise StartupError("Debug mode is refused outside development (setting EMPLOYEE_APP_ENV)")
     if not settings.departments and settings.mode != "testing":
