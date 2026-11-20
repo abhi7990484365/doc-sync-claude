@@ -23,7 +23,7 @@ Read:
 
 Inspect:
 
-- src/doc_sync/
+- src/employee_app/
 - tests/
 - docs/PROJECT_DOC.md
 

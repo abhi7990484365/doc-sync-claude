@@ -1,0 +1,13 @@
+"""Short generic validation messages (wording is Not Found in requirements)."""
+
+REQUIRED = "This field is required."
+TOO_LONG = "This value is too long."
+INVALID_EMAIL = "Enter a valid email address."
+INVALID_PHONE = "Enter a valid 10-digit phone number."
+INVALID_DEPARTMENT = "Select a department from the list."
+INVALID_DATE = "Enter a valid date (YYYY-MM-DD)."
+DATE_IN_PAST = "The joining date cannot be in the past."
+DATE_TOO_FAR = "The joining date is too far in the future."
+EMAIL_IN_USE = "This email is already in use."
+PASSWORD_TOO_SHORT = "The password is too short."
+PASSWORD_EMPTY = "The password must not be empty."

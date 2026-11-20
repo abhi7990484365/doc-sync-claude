@@ -34,7 +34,7 @@ Confirm:
 - Verification is approved.
 - Required human approvals are recorded.
 - No blocking defects remain.
-- Current branch is feature/doc-sync.
+- Current branch is feature/doc-sync-claude.
 - Target branch is main.
 - Changed files are understood.
 - No credentials or secrets are included.
@@ -73,7 +73,7 @@ Example:
 
 | File | Change | Purpose |
 |---|---|---|
-| src/doc_sync/scanner.py | Added | Repository scanning |
+| src/employee_app/scanner.py | Added | Repository scanning |
 | tests/test_scanner.py | Added | Scanner tests |
 | docs/PROJECT_DOC.md | Generated | Project documentation |
 
@@ -130,7 +130,7 @@ Do not overwrite existing changelog history.
 
 Source branch:
 
-feature/doc-sync
+feature/doc-sync-claude
 
 Target branch:
 

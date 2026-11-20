@@ -1,17 +1,28 @@
-# Build backend: setuptools (minimal choice; supports `pip install -e .` with a src/ layout).
+# Build backend: setuptools (supports `pip install -e .` with a src/ layout).
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "doc_sync"
+name = "employee_app"
 version = "0.1.0"
-description = "Scan a repository and write docs/PROJECT_DOC.md"
+description = "SCRUM-101 Add a New Employee: Flask web app and operator commands"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "Flask==3.1.3",
+    "Flask-Login==0.6.3",
+    "Flask-WTF==1.3.0",
+    "SQLAlchemy==2.0.58",
+    "Werkzeug==3.1.9",
+    "click==8.5.1",
+]
 
 [project.scripts]
-doc_sync = "doc_sync.cli:main"
+employee-admin = "employee_app.commands.cli:cli"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+include = ["employee_app*"]
+
+[tool.setuptools.package-data]
+employee_app = ["templates/*.html", "static/*"]

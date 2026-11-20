@@ -25,7 +25,7 @@ Read:
 
 Inspect the actual implementation and relevant tests under:
 
-- `src/doc_sync/`
+- `src/employee_app/`
 - `tests/`
 
 Inspect dependency files such as `requirements.txt`, `pyproject.toml`, and lock files if present.

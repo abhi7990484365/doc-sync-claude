@@ -4,7 +4,7 @@ You are the ORCHESTRATOR (main session). Subagents cannot start subagents or tal
 user, so you delegate with the Task tool, validate, commit, and hand the file onward.
 
 ## Before a step
-- `git branch --show-current` must be `feature/doc-sync`; otherwise stop and tell me.
+- `git branch --show-current` must be `feature/doc-sync-claude`; otherwise stop and tell me.
 - Check the step's input file(s) exist. If one is missing, say which and stop (suggest the
   earlier `/sdlc-*` command).
 

@@ -3,3 +3,15 @@ __pycache__/
 .pytest_cache/
 *.pyc
 .venv/
+*.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
+*.sqlite-wal
+*.sqlite-shm
+*-wal
+*-shm
+.env.*
+!.env.example
+*.egg-info/

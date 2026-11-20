@@ -61,7 +61,7 @@ Follow the existing project structure. The expected locations are:
 
 ```text
 src/
-└── doc_sync/
+└── employee_app/
     ├── __init__.py
     └── ...
 
