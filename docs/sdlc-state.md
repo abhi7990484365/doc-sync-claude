@@ -5,7 +5,7 @@
 
 - Project Name: doc-sync-claude
 - Overall Status: In Progress (SCRUM-101)
-- Current Stage: Step 6 - Code Review (not started; awaiting user go-ahead)
+- Current Stage: Step 7 - Verification (not started; awaiting user go-ahead)
 - Source Branch: feature/doc-sync-claude
 - Target Branch: main
 
@@ -18,7 +18,7 @@
 | 3 | Design Review | sdlc-design-reviewer | Completed (2026-11-20, docs/design-review.md, final re-check of Revision 3: APPROVED_WITH_CONDITIONS, 0 Critical/High/Medium open) | Approved |
 | 4 | Implementation Planning | sdlc-implementation-planner | Completed (2026-11-20, docs/impl-plan.md, 48 tasks, TASK-044/045 blocked) | Approved |
 | 5 | Implementation | sdlc-developer | Completed (2026-11-20, docs/implementation-report.md; 436 tests passed, re-run by orchestrator; TASK-041/044/045/046 not done) | Approved |
-| 6 | Code Review | sdlc-code-reviewer | Not Started | Pending |
+| 6 | Code Review | sdlc-code-reviewer | Completed (2026-11-20, docs/code-review.md, re-review after fixes: APPROVED_WITH_CONDITIONS, 0 Critical/High/Medium open, 441 tests passed) | Approved |
 | 7 | Verification | sdlc-verification-agent | Not Started | Pending |
 | 8 | Pull Request | sdlc-pr-agent | Not Started | Pending |
 
@@ -26,7 +26,7 @@
 
 - Active Stage: None
 - Active Agent: None
-- Last Completed Stage: Step 5 - Implementation
+- Last Completed Stage: Step 6 - Code Review
 - Pending Approval: None
 
 ## Blockers
@@ -42,6 +42,7 @@
 | 3 - Design Review | User | 2026-11-20 | Approved APPROVED_WITH_CONDITIONS verdict (final re-check, 0 Critical/High/Medium open). Accepted: D-24, D-25, CSRF token lifetime = session lifetime, OQ-A15 keep 401 (no WWW-Authenticate), unlock-user unknown username = error exit, NR-12 as implementation task, delegated defaults + FR-18 confirmed. Carried into planning: NR-09, NR-13, NR-14, NR-15, DR-24 (CLAUDE.md still describes a CLI; ask before editing). |
 | 4 - Implementation Planning | User | 2026-11-20 | Approved plan (48 tasks). User instructed "fix claude.md and approve": CLAUDE.md rewritten for the web app (package src/employee_app/, legacy src/doc_sync/ untouched). Recommendations accepted for DEC-1 to DEC-5; department names (DEC-3) and deployment target (DEC-4) remain Not Found. |
 | 5 - Implementation | User | 2026-11-20 | Approved implementation and report. Not done: TASK-041 (architecture amendment), TASK-044 (department names Not Found; production app will not start with empty list), TASK-045 (deployment Not Found), TASK-046 (manual browser check). Noted: strict Referer check over HTTPS (Flask-WTF), README/CHANGELOG not updated (PR step), commit not made. |
+| 6 - Code Review | User | 2026-11-20 | Approved APPROVED_WITH_CONDITIONS after fixes to REVIEW-001 to 004 (re-review: 001, 002, 004 resolved; 003 partly: transitive deps unpinned, no lock file; 005-009 accepted as-is; 010 informational). Conditions carried to verification/PR: no lock file, department names and deployment target Not Found, create-user and manual browser checks not run. Fixes are uncommitted pending user go-ahead. |
 
 ## Pull Request
 
