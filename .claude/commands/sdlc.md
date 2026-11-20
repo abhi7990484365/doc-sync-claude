@@ -416,7 +416,7 @@ Handle gracefully:
 
 ## Git
 
-- Work only on `feature/doc-sync`.
+- Work only on `feature/doc-sync-claude`.
 - Never commit directly to `main`.
 - Never force-push.
 - Never discard user changes.
