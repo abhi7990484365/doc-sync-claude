@@ -2,9 +2,9 @@
 
 Source branch: `feature/doc-sync-claude`. Target branch: `main`. Branch HEAD at preparation time: `f43ffb0`. Unknown = `Not Found`.
 
-PR Status: Not Created; PR Number: Not Found; PR URL: Not Found
+PR Status: Created (open); PR Number: 2; PR URL: https://github.com/abhi7990484365/doc-sync-claude/pull/2
 
-Nothing was committed, pushed or opened in this step. Explicit human approval is still required before any push or PR creation.
+Created on 2026-11-20 after explicit user approval: the remaining changes were committed, `feature/doc-sync-claude` was pushed to `origin` as a fast-forward (`f42ed3f..e1ea61e`), and GitHub confirmed PR #2 (base `main`, head `feature/doc-sync-claude`, state OPEN). The report text below was prepared before creation; the "uncommitted" notes in it refer to the pre-commit state.
 
 ## Proposed PR title
 
