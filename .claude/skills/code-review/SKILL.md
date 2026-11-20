@@ -25,7 +25,7 @@ Read:
 
 Inspect:
 
-- `src/doc_sync/`
+- `src/employee_app/`
 - `tests/`
 - Dependency configuration and lock files, if available.
 

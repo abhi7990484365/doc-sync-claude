@@ -77,7 +77,7 @@ Verify the final PROJECT_DOC.md:
 
 ## Git Rules
 
-- Work only on feature/doc-sync.
+- Work only on feature/doc-sync-claude.
 - Do not commit or push.
 - Never force-push.
 - Never modify main.

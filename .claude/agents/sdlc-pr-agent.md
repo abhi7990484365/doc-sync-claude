@@ -61,7 +61,7 @@ Provide a checklist that reviewers can complete before approving the PR.
 
 ## Git Rules
 
-- Source branch: feature/doc-sync.
+- Source branch: feature/doc-sync-claude.
 - Target branch: main.
 - Never create a PR from main.
 - Never force-push.
@@ -87,7 +87,7 @@ Before creating a PR, verify:
 - Step 7 verification is approved.
 - Verification verdict is VERIFIED or VERIFIED_WITH_LIMITATIONS with accepted limitations.
 - Code review is approved.
-- Current branch is feature/doc-sync.
+- Current branch is feature/doc-sync-claude.
 - Working-tree changes are understood.
 - PR title and description are complete.
 - Test evidence is accurate.

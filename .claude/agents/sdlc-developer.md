@@ -41,7 +41,7 @@ All required inputs must have the appropriate human approval recorded before imp
 - Avoid duplicate code.
 - Follow the approved architecture.
 - Do not introduce unnecessary dependencies.
-- Keep source code under `src/doc_sync/`.
+- Keep source code under `src/employee_app/`.
 - Keep automated tests under `tests/`.
 - Use pytest for automated tests.
 - Handle missing files, empty repositories, and API failures gracefully.
@@ -53,11 +53,11 @@ All required inputs must have the appropriate human approval recorded before imp
 Before making changes:
 
 1. Check the current Git branch.
-2. Confirm the branch is `feature/doc-sync`.
+2. Confirm the branch is `feature/doc-sync-claude`.
 3. Inspect the working tree for existing changes.
 4. Do not overwrite or discard existing user changes.
 
-If the current branch is not `feature/doc-sync`, stop and report the issue.
+If the current branch is not `feature/doc-sync-claude`, stop and report the issue.
 
 Never:
 

@@ -9,7 +9,7 @@ SECRETS = re.compile(r"ghp_|github_pat_|password\s*=", re.IGNORECASE)
 
 def violation(command: str) -> str:
     if PUSH_MAIN.search(command):
-        return "Blocked: pushing to main is not allowed. Use feature/doc-sync."
+        return "Blocked: pushing to main is not allowed. Use feature/doc-sync-claude."
     if SECRETS.search(command):
         return "Blocked: command contains a secret-like string. Use environment variables."
     return ""

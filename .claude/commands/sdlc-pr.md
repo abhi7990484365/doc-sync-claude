@@ -109,7 +109,7 @@ Do not push or create the PR until approval is received.
 
 After explicit approval:
 
-1. Confirm the current branch is feature/doc-sync.
+1. Confirm the current branch is feature/doc-sync-claude.
 2. Confirm the target branch is main.
 3. Confirm the working-tree changes are understood.
 4. Ensure the authorized changes are committed and pushed without rewriting history.

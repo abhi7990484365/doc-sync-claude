@@ -1,6 +1,6 @@
 ---
 paths:
-  - "src/doc_sync/**/*.py"
+  - "src/employee_app/**/*.py"
   - "tests/**/*.py"
   - "docs/implementation-report.md"
 ---
@@ -64,7 +64,7 @@ Do not silently ignore errors or invent missing information.
 
 ## 6. Git Rules
 
-- Work only on the `feature/doc-sync` branch.
+- Work only on the `feature/doc-sync-claude` branch.
 - Check the current branch before making changes.
 - Preserve existing uncommitted user changes.
 - Never commit directly to `main`.

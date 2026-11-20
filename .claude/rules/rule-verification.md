@@ -1,6 +1,6 @@
 ---
 paths:
-  - "src/doc_sync/**/*.py"
+  - "src/employee_app/**/*.py"
   - "tests/**/*.py"
   - "docs/PROJECT_DOC.md"
   - "docs/verification-report.md"

@@ -43,7 +43,7 @@ The Summary must contain 2–3 sentences.
 
 ## 5. Git Rules
 
-- Source branch must be `feature/doc-sync`.
+- Source branch must be `feature/doc-sync-claude`.
 - Target branch must be `main`.
 - Never force-push.
 - Never push directly to main.
