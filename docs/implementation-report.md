@@ -57,7 +57,7 @@ Changed existing files (minimal; each reported):
 1. `requirements.txt`: appended pinned `Flask==3.1.3`, `Flask-Login==0.6.3`, `Flask-WTF==1.3.0`, `SQLAlchemy==2.0.58`, `Werkzeug==3.1.9` (existing `pytest>=8.0`, `pip-audit>=2.7` lines untouched).
 2. `pytest.ini`: added a `markers` entry registering `informative` (used by TASK-047). `pythonpath = src` and `testpaths = tests` unchanged, so the legacy layout is unaffected.
 3. `.gitignore`: added `*.db`, `*.sqlite`, `*.sqlite3`, `*.db-wal`, `*.db-shm`, `*.sqlite-wal`, `*.sqlite-shm`, `*-wal`, `*-shm`, `.env.*`, `!.env.example`. (My first append glued onto the unterminated `.venv/` line; found by `git status` and fixed. Final content verified; `git check-ignore` confirms `x.sqlite3`, `x.db-wal`, `.env` are ignored.)
-4. Not changed: `pyproject.toml` (no dependency or script entry added; `packages.find where=["src"]` already discovers `employee_app`), `README.md`, `CHANGELOG.md` (left for the PR step; no edit was necessary to keep legacy working).
+4. Not changed in the original Step 5 pass (later changed by the review fixes, see section 8): `pyproject.toml` (no dependency or script entry added; `packages.find where=["src"]` already discovers `employee_app`), `README.md`, `CHANGELOG.md` (left for the PR step; no edit was necessary to keep legacy working).
 
 Legacy `src/doc_sync/`: in this working tree it is an empty untracked directory and `tests/` was empty before this step (`git ls-files src tests` listed nothing), so there was no legacy code or test to run, modify or delete. Nothing was touched there. Whether legacy `doc_sync` still works: `Not Found` (no legacy code is present to check).
 

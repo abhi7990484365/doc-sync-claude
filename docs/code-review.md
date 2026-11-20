@@ -142,7 +142,7 @@ Five runtime dependencies are pinned exactly in `requirements.txt` and all are i
 - Not Run: manual browser check (TASK-046), deployment-target checks (TASK-045), network file system, non-Windows platforms, audit of the full installed environment, repeated flakiness runs.
 - Written sign-off records for the delegated defaults: Not Found.
 
-## 8. Re-review (delta only: fixes for REVIEW-001 to REVIEW-004, uncommitted in the working tree)
+## 8. Re-review (delta only: fixes for REVIEW-001 to REVIEW-004, uncommitted in the working tree at review time; committed afterwards as 28b3852, 0e8be2f)
 
 Scope: `pyproject.toml`, `requirements.txt`, `requirements-dev.txt` (new), `README.md`, `.gitignore`, `src/employee_app/app.py`, `tests/test_app_startup.py`, `tests/test_config.py`, and anything they could break. Report section 8 of `docs/implementation-report.md` was compared with what was observed.
 
