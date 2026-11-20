@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headersHelper": "powershell -NoProfile -ExecutionPolicy Bypass -File .claude/hooks/github-mcp-headers.ps1"
+    },
+    "atlassian": {
+      "type": "http",
+      "url": "https://mcp.atlassian.com/v1/mcp/authv2"
+    }
+  }
+}
